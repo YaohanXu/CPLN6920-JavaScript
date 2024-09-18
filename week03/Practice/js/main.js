@@ -26,45 +26,45 @@ baseLayer.addTo(map);
 const response = await fetch("data/pa_pres_results.geojson");
 const data = await response.json();
 
-const dataLayer = L.geoJSON(data, {
-  style: function(feature) { // Add a style option to the GeoJSON layer
-    let party = feature.properties.party;
-    let fillColor = "gray";
+function styleCounty(feature) {
+  let party = feature.properties.party;
+  let fillColor = "gray";
 
-    if (party === "REPUBLICAN") {
-      fillColor = "red";
-    } else if (party === "DEMOCRAT") {
-      fillColor = "blue";
-    }
+  if (party === "REPUBLICAN") {
+    fillColor = "red";
+  } else if (party === "DEMOCRAT") {
+    fillColor = "blue";
+  }
 
-    //
-    // Normalization of evenness
-    //
-    
-    // Initialize maximum and minimum values
-    let maxEvenness = -Infinity;
-    let minEvenness = Infinity;
+  //
+  // Normalization of evenness
+  //
+  
+  // Initialize maximum and minimum values
+  let maxEvenness = -Infinity;
+  let minEvenness = Infinity;
 
-    // Loop through all features to calculate the maximum and minimum evenness
-    data.features.forEach(function(feature) {
-      let evenness = feature.properties.candidatevotes / feature.properties.totalvotes;
-      if (evenness > maxEvenness) maxEvenness = evenness;
-      if (evenness < minEvenness) minEvenness = evenness;
-    });
-
+  // Loop through all features to calculate the maximum and minimum evenness
+  data.features.forEach(function(feature) {
     let evenness = feature.properties.candidatevotes / feature.properties.totalvotes;
-    let normalizedEvenness = (evenness - minEvenness) / (maxEvenness - minEvenness);
-    let fillOpacity = normalizedEvenness;
-    // let fillOpacity = Math.min(Math.pow(evenness, 1.8), 1);
-    
-    return {
-      color: "gray",
-      weight: 1,
-      fillColor: fillColor,
-      fillOpacity: fillOpacity,
-      };
-    }
+    if (evenness > maxEvenness) maxEvenness = evenness;
+    if (evenness < minEvenness) minEvenness = evenness;
   });
+
+  let evenness = feature.properties.candidatevotes / feature.properties.totalvotes;
+  let normalizedEvenness = (evenness - minEvenness) / (maxEvenness - minEvenness);
+  let fillOpacity = normalizedEvenness;
+  // let fillOpacity = Math.min(Math.pow(evenness, 1.8), 1);
+  
+  return {
+    color: "gray",
+    weight: 1,
+    fillColor: fillColor,
+    fillOpacity: fillOpacity,
+    };
+  }
+
+const dataLayer = L.geoJSON(data, {style: styleCounty} );
 dataLayer.bindTooltip((layer) => layer.feature.properties.name);
 dataLayer.addTo(map);
 
