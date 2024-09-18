@@ -71,4 +71,6 @@ dataLayer.addTo(map);
 //
 // Fit the map to the bounds of the GeoJSON data
 //
-map.fitBounds(dataLayer.getBounds());
+map.fitBounds(dataLayer.getBounds(), {
+  padding: [50, 50]
+});
