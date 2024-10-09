@@ -1,16 +1,17 @@
+/* eslint-disable require-jsdoc */
 import { Chart } from 'https://cdn.jsdelivr.net/npm/chart.js@4.4.4/auto/+esm'; // Add “/auto/” to automatically register all chart types.
 
 function initChart(chartEl, hoodsCollection, stations) {
   const hoods = hoodsCollection.features
-    .filter(hood => hood.properties.stationDensity > 0)
-    .sort((a, b) => b.properties.stationDensity - a.properties.stationDensity);
+      .filter((hood) => hood.properties.stationDensity > 0)
+      .sort((a, b) => b.properties.stationDensity - a.properties.stationDensity);
   /*
   function getHoodNames(hood) {
     return hood.properties['LISTNAME'];
   }
   */
-  const hoodNames = hoods.map(hood => hood.properties['LISTNAME']);
-  const hoodDensities = hoods.map(hood => hood.properties.stationDensity);
+  const hoodNames = hoods.map((hood) => hood.properties['LISTNAME']);
+  const hoodDensities = hoods.map((hood) => hood.properties.stationDensity);
 
   console.log(hoodNames);
   console.log(hoodDensities);
@@ -18,7 +19,7 @@ function initChart(chartEl, hoodsCollection, stations) {
   const data = {
     labels: hoodNames,
     datasets: [{
-      label : 'Stations per Square Kilometer',
+      label: 'Stations per Square Kilometer',
       data: hoodDensities,
     }],
   };
@@ -29,6 +30,7 @@ function initChart(chartEl, hoodsCollection, stations) {
       y: { beginAtZero: true },
     },
   };
+  // eslint-disable-next-line no-unused-vars
   const chart = new Chart(chartEl, { type: 'bar', data, options });
 }
 

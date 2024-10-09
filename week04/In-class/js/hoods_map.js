@@ -1,3 +1,4 @@
+/* eslint-disable require-jsdoc */
 function initMap(mapEl, hoodsCollection, stations) {
   const map = L.map(mapEl);
 
@@ -11,7 +12,7 @@ function initMap(mapEl, hoodsCollection, stations) {
   stationsLayer.addTo(map);
 
   // Add tooltip with name and bikeshare density...
-  hoodsLayer.bindTooltip(layer => {
+  hoodsLayer.bindTooltip((layer) => {
     const hood = layer.feature;
     const name = hood.properties['LISTNAME'];
     const density = hood.properties.stationDensity.toFixed(2);
